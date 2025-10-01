@@ -1,9 +1,12 @@
 package com.pagasi.lostfound.user_service.service.Implementation;
 
+import com.pagasi.lostfound.user_service.converter.ContactInfoConverter;
 import com.pagasi.lostfound.user_service.converter.UserConverter;
 import com.pagasi.lostfound.user_service.dtos.*;
+import com.pagasi.lostfound.user_service.entity.ContactEntity;
 import com.pagasi.lostfound.user_service.entity.UserEntity;
 import com.pagasi.lostfound.user_service.repository.UserRepository;
+import com.pagasi.lostfound.user_service.repository.contactInfoRepository;
 import com.pagasi.lostfound.user_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +18,10 @@ import java.util.Random;
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Autowired
+    private ContactInfoConverter contactInfoConverter;
+    @Autowired
+    private contactInfoRepository contactInfoRepository;
     @Autowired
     private UserConverter userConverter;
     @Autowired
@@ -105,5 +112,27 @@ public class UserServiceImpl implements UserService {
         } while (userRepository.existsByUsername(username)); // ensure uniqueness
 
         return username;
+    }
+    public ContactInfoDto saveContactInfo(ContactInfoDto contactInfoDto,Long id) {
+        Optional<UserEntity> optionalContactEntity = userRepository.findById(id);
+        if(optionalContactEntity.isEmpty()) {
+            throw new RuntimeException("Register first");
+        }
+        Optional<ContactEntity> existingDetailsOpt = contactInfoRepository.findByUser_Id(id);
+        ContactEntity savedEntity;
+        if(existingDetailsOpt.isPresent()){
+            ContactEntity existingDetails = existingDetailsOpt.get();
+            existingDetails.setAddress(contactInfoDto.getAddress());
+            existingDetails.setOrganization(contactInfoDto.getOrganization());
+            existingDetails.setEmailId(contactInfoDto.getEmailId());
+            existingDetails.setAdditionNumber(contactInfoDto.getAdditionNumber());
+            existingDetails.setSocialMediaId(contactInfoDto.getSocialMediaId());
+            savedEntity = contactInfoRepository.save(existingDetails);
+        }else{
+            ContactEntity newDetails = contactInfoConverter.dtoToEntity(contactInfoDto);
+            newDetails.setUser(optionalContactEntity.get());  // Link with UserEntity
+            savedEntity = contactInfoRepository.save(newDetails);
+        }
+        return contactInfoConverter.entityToDto(savedEntity);
     }
 }

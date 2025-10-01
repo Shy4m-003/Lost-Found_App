@@ -14,9 +14,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-
 public class SecurityConfig {
     @Autowired
     private CustomUserDetailsServiceImpl customUserDetailsService;
@@ -24,6 +24,8 @@ public class SecurityConfig {
     private UserServiceImpl userLogic;
     @Autowired
     private PasswordEncrypt passwordEncrypt;
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -32,7 +34,9 @@ public class SecurityConfig {
             ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)registry.requestMatchers(new String[]{"/api/user-service/v1/sign-up/**"})).permitAll();
             ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)registry.requestMatchers(new String[]{"/h2-console/**"})).permitAll();
             ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)registry.anyRequest()).authenticated();
-        }).httpBasic(Customizer.withDefaults()).build();
+        }).httpBasic(Customizer.withDefaults())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean

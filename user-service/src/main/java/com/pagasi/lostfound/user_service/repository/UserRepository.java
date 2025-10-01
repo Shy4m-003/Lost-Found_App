@@ -1,7 +1,6 @@
 package com.pagasi.lostfound.user_service.repository;
 
 import com.pagasi.lostfound.user_service.entity.UserEntity;
-import org.apache.catalina.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

@@ -10,4 +10,5 @@ public interface UserService {
     EditDetails changeDetails(Long id, EditDetails editDetails);
     void deleteAccount(Long id, DeleteDto dto);
     String generateUniqueUsername(String username);
+    ContactInfoDto saveContactInfo(ContactInfoDto contactInfoDto,Long id);
 }

@@ -4,8 +4,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.SecretKeyBuilder;
 import jakarta.xml.bind.DatatypeConverter;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import javax.crypto.SecretKey;
 
+
+@SpringBootTest
 public class JwtSecretKeyMakerTest {
     @Test
     public void generateSecretKey() {

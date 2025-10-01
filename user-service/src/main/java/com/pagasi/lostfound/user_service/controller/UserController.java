@@ -25,7 +25,6 @@ public class UserController {
     private CustomUserDetailsServiceImpl customUserDetailsService;
     @Autowired
     private JwtService jwtService;
-
     @PostMapping({"/sign-up/user"})
     public ResponseEntity<SignInDTO> signup(@RequestBody SignInDTO signInDTO) {
         signInDTO = this.userLogic.signIn(signInDTO);
@@ -61,6 +60,11 @@ public class UserController {
     public ResponseEntity<?> delete(@PathVariable Long id, @RequestBody DeleteDto dto) {
         this.userLogic.deleteAccount(id, dto);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+    @PostMapping({"/add-contactInfo/{id}"})
+    public ResponseEntity<ContactInfoDto> addContactInfo(@PathVariable long id, @RequestBody ContactInfoDto contactInfoDto){
+        contactInfoDto = this.userLogic.saveContactInfo(contactInfoDto, id);
+        return new ResponseEntity<>(contactInfoDto,HttpStatus.OK);
     }
 }
 
