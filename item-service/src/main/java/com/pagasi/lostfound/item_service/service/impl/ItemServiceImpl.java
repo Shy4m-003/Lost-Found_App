@@ -30,8 +30,19 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void post(ItemDto itemDto) {
-        Optional<ItemEntity> existing = itemRepository.findByNameAndCategoryAndDescription(itemDto.getName(), itemDto.getCategory(), itemDto.getDescription());
-        if(existing.isPresent()){
+        Optional<ItemEntity> existing = itemRepository.findByNameAndCategoryAndDescriptionAndPostedByUserId(itemDto.getName(), itemDto.getCategory(), itemDto.getDescription(), itemDto.getPostedByUserId());
+
+        if (existing.isPresent()) {
+            ItemEntity existingItem = existing.get();
+
+            if (existingItem.getStatus() == ItemStatus.DELETED) {
+                existingItem.setStatus(ItemStatus.POSTED);
+                existingItem.setPostedTime(LocalDateTime.now());
+                existingItem.setScheduledDeletionAt(null);
+                itemRepository.save(existingItem);
+                return;
+            }
+
             throw new IllegalStateException("Duplicate Item");
         }
         ItemEntity itemEntity = itemConverter.dtoToEntity(itemDto);

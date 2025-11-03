@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ItemRepository extends MongoRepository<ItemEntity, String> {
-    Optional<ItemEntity> findByNameAndCategoryAndDescription(String name, String category, String Description);
+    Optional<ItemEntity> findByNameAndCategoryAndDescriptionAndPostedByUserId(String name, String category, String description, String postedByUserId);
     List<ItemEntity> findByStatusAndScheduledDeletionAtBefore(ItemStatus itemStatus, LocalDateTime now);
 }
