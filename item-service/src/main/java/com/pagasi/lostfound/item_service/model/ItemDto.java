@@ -11,6 +11,8 @@ public class ItemDto {
     private String name;
     private String category;
     private String description;
+    private String location;
+    private String organization;
     private String lastSeenLocation;
     private String currentLocation;
     private List<String> images;

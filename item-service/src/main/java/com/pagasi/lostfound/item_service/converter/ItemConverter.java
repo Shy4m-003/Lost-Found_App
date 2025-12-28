@@ -12,6 +12,8 @@ public class ItemConverter {
         entity.setCategory(dto.getCategory());
         entity.setDescription(dto.getDescription());
         entity.setName(dto.getName());
+        entity.setLocation(dto.getLocation());
+        entity.setOrganization(dto.getOrganization());
         entity.setCurrentLocation(dto.getCurrentLocation());
         entity.setLastSeenLocation(dto.getLastSeenLocation());
         entity.setImages(dto.getImages());

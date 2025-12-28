@@ -20,6 +20,8 @@ public class ItemEntity {
     private String category;
     private String description;
     private ItemStatus status = ItemStatus.POSTED;
+    private String location;
+    private String organization;
     private String lastSeenLocation;
     private String currentLocation;
     private List<String> images;
